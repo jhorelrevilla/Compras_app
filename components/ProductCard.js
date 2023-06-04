@@ -1,45 +1,47 @@
-import {React,useState} from "react";
-import { View,Text, TouchableOpacity, Image, TextInput, Button} from "react-native";
+import { React, useState } from "react";
+import { View, Text, TouchableOpacity, Image, TextInput, Button } from "react-native";
 
-const ProductCard = ({item}) =>{
-    const [productTotalPrice,ChangeProductTotalPrice]=useState((item.price*item.count).toFixed(2))
-    const [itemCount,ChangeItemCount] =useState(item.count)
+const ProductCard = ({ item, isClickable }) => {
+    const [productTotalPrice, ChangeProductTotalPrice] = useState((item.price * item.count).toFixed(2))
+    const [itemCount, ChangeItemCount] = useState(item.count)
 
-    const MinusButton=()=>{
-        const actualCount=parseInt(itemCount)
-        if(actualCount>=2){
-            const newCount=actualCount-1
+    const MinusButton = () => {
+        const actualCount = parseInt(itemCount)
+        if (actualCount >= 2) {
+            const newCount = actualCount - 1
             ChangeItemCount(newCount.toString())
-            const newTotalPrice=item.price*newCount
-            ChangeProductTotalPrice(newTotalPrice.toFixed(2))
-        }    
-    }
-    const PlusButton=()=>{
-        const actualCount=parseInt(itemCount)
-        if(actualCount<=98){
-            const newCount=parseInt(itemCount)+1
-            ChangeItemCount(newCount.toString())
-            const newTotalPrice=item.price*newCount
+            const newTotalPrice = item.price * newCount
             ChangeProductTotalPrice(newTotalPrice.toFixed(2))
         }
     }
-    const updateTotalPrice=(value)=>{
-        const count=parseInt(value)
-        if(isNaN(count)){
-            ChangeItemCount(0)
-            ChangeProductTotalPrice(0)
+    const PlusButton = () => {
+        const actualCount = parseInt(itemCount)
+        if (actualCount <= 98) {
+            const newCount = parseInt(itemCount) + 1
+            ChangeItemCount(newCount.toString())
+            const newTotalPrice = item.price * newCount
+            ChangeProductTotalPrice(newTotalPrice.toFixed(2))
+        }
+    }
+    const updateTotalPrice = (value) => {
+        const count = parseInt(value)
+        if (isNaN(count)) {
+            // console.log("is Nan")
+            ChangeItemCount(1)
+            ChangeProductTotalPrice(item.price.toFixed(2))
             return
         }
         ChangeItemCount(count)
-        const newTotalPrice=item.price*parseInt(value)
+        const newTotalPrice = item.price * parseInt(value)
         ChangeProductTotalPrice(newTotalPrice.toFixed(2))
     }
-    return(
-        <TouchableOpacity 
+
+    return (
+        <TouchableOpacity
             style={
                 {
-                    elevation:3,
-                    shadowRadius:6,
+                    elevation: 3,
+                    shadowRadius: 6,
                 }
             }
             className="h-44 bg-[#F6F4FA] m-3 rounded-lg t.shadow2xl border"
@@ -75,7 +77,7 @@ const ProductCard = ({item}) =>{
                     </TouchableOpacity>
                 </View>
                 <View className="flex-row justify-center items-center h-[30%] ">
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         className="h-12 w-12 rounded-full mx-1"
                         onPress={MinusButton}
                     >
@@ -86,14 +88,14 @@ const ProductCard = ({item}) =>{
                     </TouchableOpacity>
                     <TextInput
                         className="font-bold text-4xl w-12 text-center"
-                        value={itemCount.toString()}
-                        onChangeText={updateTotalPrice}
-                        // onChange={updateTotalPrice}
+                        value={'' + itemCount}
+                        // onChangeText={updateTotalPrice}
+                        onChange={updateTotalPrice}
                         maxLength={2}
                         keyboardType="numeric"
                         inputMode="numeric"
                     />
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         className="h-12 w-12 rounded-full mx-1"
                         onPress={PlusButton}
                     >
@@ -106,5 +108,7 @@ const ProductCard = ({item}) =>{
             </View>
         </TouchableOpacity>
     )
+
+
 }
 export default ProductCard

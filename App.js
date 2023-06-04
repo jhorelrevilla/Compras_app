@@ -3,12 +3,14 @@ import { StyleSheet, Text, View ,TextInput} from 'react-native';
 import "./screens/HomeScreen" 
 import HomeScreen from './screens/HomeScreen';
 import ListCatalog from './screens/ListCatalog';
+import NewProduct from './screens/NewProduct';
 
 export default function App() {
   const name="jhorel"
   return  (
     // <HomeScreen/>
-    <ListCatalog/>
+    // <ListCatalog/>
+    <NewProduct/>
   );
 }
 
