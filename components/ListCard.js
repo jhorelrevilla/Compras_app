@@ -1,13 +1,13 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 
-const ProductCard = ({ list }) => {
+const ListCard = ({ list }) => {
     const finalPayment=list.elementList.reduce((count,object)=>{
         return count+object.price
     },0.0)
     return (
         <View
-            className="bg-[#EAE9FF] rounded-lg h-72"
+            className="bg-[#EAE9FF] rounded-lg h-72 mt-2"
         >
             <Text className="mt-3 ml-5 font-bold text-xl">
                 {list.name}
@@ -22,7 +22,7 @@ const ProductCard = ({ list }) => {
                 >
                     {list.elementList.map((item,key) => {
                         return(
-                            <Text className="text-center my-2 text-1xl">
+                            <Text className="text-center my-2 text-1xl" key={key}>
                                 {item.name}
                             </Text>
                         )
@@ -40,4 +40,4 @@ const ProductCard = ({ list }) => {
     )
 }
 
-export default ProductCard
+export default ListCard

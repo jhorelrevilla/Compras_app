@@ -1,10 +1,14 @@
 import { React, useState } from "react";
 import { View, Text, TouchableOpacity, Image, TextInput, Button } from "react-native";
 
-const ProductCard = ({ item, isClickable }) => {
-    const [productTotalPrice, ChangeProductTotalPrice] = useState((item.price * item.count).toFixed(2))
+const ProductCard = ({ item, onDelete }) => {
+    const [productTotalPrice, ChangeProductTotalPrice] = useState(item.payment)
     const [itemCount, ChangeItemCount] = useState(item.count)
 
+
+    const handleDelete = () => {
+        onDelete(item.id)
+    }
     const MinusButton = () => {
         const actualCount = parseInt(itemCount)
         if (actualCount >= 2) {
@@ -56,7 +60,7 @@ const ProductCard = ({ item, isClickable }) => {
                             Precio
                         </Text>
                         <Text className="text-lg text-center">
-                            S/ {item.price.toFixed(2)}
+                            S/ {item.price}
                         </Text>
                     </View>
                     <View className="flex-column justify-center w-24">
@@ -69,6 +73,7 @@ const ProductCard = ({ item, isClickable }) => {
                     </View>
                     <TouchableOpacity
                         className="h-12 w-12 "
+                        onPress={handleDelete}
                     >
                         <Image
                             className="h-12 w-12"

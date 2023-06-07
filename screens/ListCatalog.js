@@ -1,92 +1,146 @@
-import {React,useState} from "react";
-import { View,Text, TouchableOpacity, Image, TextInput, ScrollView} from "react-native";
+import { React, useState } from "react";
+import { View, Text, TouchableOpacity, Image, ScrollView, TextInput, Alert } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ProductCard from "../components/ProductCard";
+import ListCard from '../components/ListCard'
 
-const productList=[
+
+const data=[
     {
-        name:"producto 1",
-        price: 1.5,
-        count: 1
+    name:"Lista 1",
+    date: "Dia,mes,año",
+    elementList:[
+        {
+            name:"Producto 1",
+            price: 1.0,
+            count: 4
+        },
+        {
+            name:"Producto 2",
+            price: 1.1,
+            count: 3
+        },
+        {
+            name:"Producto 3",
+            price: 1.0,
+            count: 1
+        },
+        {
+            name:"Producto 4",
+            price: 1.0,
+            count: 1
+        },
+        {
+            name:"Producto 5",
+            price: 1.0,
+            count: 1
+        },
+        {
+            name:"Producto 6",
+            price: 1.0,
+            count: 1
+        },
+    ]
     },
     {
-        name:"producto 2",
-        price: 2.0,
-        count: 1
-    },
-    {
-        name:"producto 3",
-        price: 3.0,
-        count: 1
-    },
-    {
-        name:"producto 4",
-        price: 2.4,
-        count: 1
-    },
-    {
-        name:"producto 5",
-        price: 1.60,
-        count: 1
-    },
+        name:"Lista 2",
+        date: "Dia,mes,año",
+        elementList:[
+            {
+                name:"Producto 7",
+                price: 1.0,
+                count: 4
+            },
+            {
+                name:"Producto 8",
+                price: 1.1,
+                count: 3
+            },
+            {
+                name:"Producto 9",
+                price: 1.0,
+                count: 1
+            },
+            {
+                name:"Producto 10",
+                price: 1.0,
+                count: 1
+            },
+            {
+                name:"Producto 11",
+                price: 1.0,
+                count: 1
+            },
+            {
+                name:"Producto 12",
+                price: 1.0,
+                count: 1
+            },
+        ]
+        },
+        {
+            name:"Lista 2",
+            date: "Dia,mes,año",
+            elementList:[
+                {
+                    name:"Producto 7",
+                    price: 1.0,
+                    count: 4
+                },
+                {
+                    name:"Producto 8",
+                    price: 1.1,
+                    count: 3
+                },
+                {
+                    name:"Producto 9",
+                    price: 1.0,
+                    count: 1
+                },
+                {
+                    name:"Producto 10",
+                    price: 1.0,
+                    count: 1
+                },
+                {
+                    name:"Producto 11",
+                    price: 1.0,
+                    count: 1
+                },
+                {
+                    name:"Producto 12",
+                    price: 1.0,
+                    count: 1
+                },
+            ]
+            }
+
 ]
 
-
-const ListCatalog = () =>{
-    const [listName,ChangeListName]=useState("Lista nueva")
+const ListCatalog = ({navigation}) => {
     return(
-        <SafeAreaView className="h-full">
-            <View className="h-[16%]">
-                <View className="flex-row justify-between items-center h-16 mx-3">
-                    <Text>
-                        volver
-                    </Text>
-                    <View className="flex-column items-center">
-                        <Text className="text-xl font-bold">
-                            Nueva Lista
-                        </Text>
-                        <TextInput
-                            value={listName}
-                            onChangeText={ChangeListName}
-                            maxLength={20}
-                        />
-                    </View>
-                    <Text>
-                        Borrar
-                    </Text>
-                </View>
-                <View className="bg-[#A187D9]  h-12 flex-row justify-center items-center">
-                    <Text className="text-white text-2xl font-bold">
-                        Pago S/ 16.0 
-                    </Text>
-                </View>
-            </View>
-            <View className="h-[76%] mx-5">
-                <ScrollView className="h-full">
-                    {productList.map((item,key) => {
-                        return(
-                            <ProductCard item={item}/>
-                        )
-                    })}
-                    
-                </ScrollView>
-            </View>
-            <View className="h-[8%]">
-                <TouchableOpacity className="bg-black h-full">
-                    <View className="mx-4 h-full flex-row justify-between items-center">
-                        <Text className="text-xl text-white font-bold">
-                            Nuevo Producto
-                        </Text>
-                        <Image
-                            className="h-10 w-10"
-                            source={require('../assets/images/NewProductIcon.png')}
-                        />
-                    </View>
+        <SafeAreaView>
+            <View className="relative flex justify-center items-center p-3">
+                <TouchableOpacity
+                    onPress={()=>navigation.goBack()}
+                    className="absolute left-0"
+                >
+                    <Image
+                        className="h-10 w-10"
+                        source={require("../assets/images/backIcon.png")}
+                    />
                 </TouchableOpacity>
+                <Text className="text-xl font-bold">
+                    Mis Listas
+                </Text>
             </View>
-            
+            <ScrollView>
+                {data.map((item,key) => {
+                    return(
+                        <ListCard list={item} key={key}/>
+                    )
+                })}
+            </ScrollView>
         </SafeAreaView>
     )
 }
-
 export default ListCatalog

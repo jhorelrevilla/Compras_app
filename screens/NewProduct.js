@@ -1,31 +1,37 @@
 import { React, useState } from "react";
 import { View, Text, TouchableOpacity, Image, TextInput, Alert } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-const NewProduct = () => {
+
+const NewProduct = ({navigation,route}) => {
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
     const [count, setCount] = useState(1)
     const [payment, setPayment] = useState(null)
 
+    const hadleNewProduct= () => {
+        // console.log(route.params.productList)
+        const newProductObject={
+            name:name,
+            price:price,
+            count:count,
+            payment:payment,
+            id:route.params.productList.length+1
+        }
+        const newList=[...route.params.productList,newProductObject]
+        route.params.setProductList(newList)
+    }
+
     const calculateTotalPayment = (actualPrice,actualCount) => {
-        console.log('price',price)
-        console.log('count',count)
-        console.log('totalPayment',totalPayment)
         const totalPayment=parseFloat(actualPrice)*actualCount
         return totalPayment.toFixed(2)
     }
-
     const handleInputPrice = (value) => {
         const regex=/^(?:\d{1,3}(?:\.\d{0,2})?)?$/
         if (!regex.test(value)){
             return 
         }
-        if(value.slice(-1)=='.'){
-            setPrice(value)
-            return
-        }
         const actualPrice=value.length==0?0:value
-        setPrice(''+parseFloat(actualPrice))
+        setPrice(value)
         const totalPayment = calculateTotalPayment(actualPrice,count)
         setPayment(totalPayment)
     }
@@ -35,32 +41,36 @@ const NewProduct = () => {
             return
         }
         setCount(value)
-        const actualCount=value.length==0?0:value
+        const actualCount=value.length==0?1:value
         const totalPayment = calculateTotalPayment(price,actualCount)
         setPayment(totalPayment)
     }
     const handleBlurCount = () => {
         if(count==''){
             setCount(1)
+            return
         }
+
     }
     const handleBlurPrice = () => {
         if(price==''){
             setPrice('0.0')
+            return
         }
+        setPrice(parseFloat(price).toFixed(2))
     }
     return (
         <SafeAreaView>
-            <View className="h-9 flex-row justify-start items-center  mx-3">
-                <TouchableOpacity>
+            <View className="relative flex justify-center items-center p-3">
+                <TouchableOpacity
+                    onPress={()=>navigation.goBack()}
+                    className="absolute left-0"
+                >
                     <Image
-                        className="h-12 w-12"
+                        className="h-10 w-10"
                         source={require("../assets/images/backIcon.png")}
                     />
                 </TouchableOpacity>
-                
-            </View>
-            <View className="h-9 flex justify-center items-center mx-3">
                 <Text className="text-xl font-bold">
                     Nuevo producto
                 </Text>
@@ -105,7 +115,7 @@ const NewProduct = () => {
                         source={require("../assets/images/MinusIcon.png")}
                     />
                     <Text className="font-bold text-4xl w-12 text-center">
-                        {'' + count}
+                        {count.length==0?'1':'' + count}
                     </Text>
                     <Image
                         className="h-12 w-12"
@@ -113,7 +123,7 @@ const NewProduct = () => {
                     />
                 </View>
             </View>
-            <View className=" h-[56%] mx-5">
+            <View className=" h-[58%] mx-5">
                 <Text className="text-lg font-bold">
                     Nombre
                 </Text>
@@ -154,7 +164,10 @@ const NewProduct = () => {
             </View>
             <TouchableOpacity 
                 className="bg-black h-[8%] flex-row justify-center items-center"
-                // onPress={}
+                onPress={()=>{
+                    hadleNewProduct()
+                    navigation.goBack()
+                }}
             >
                 <Text className="text-center text-white text-xl font-bold">
                     Crear
