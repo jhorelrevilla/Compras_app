@@ -6,8 +6,8 @@ const ListCard = ({ list }) => {
         return count+object.price
     },0.0)
     return (
-        <View
-            className="bg-[#EAE9FF] rounded-lg h-72 mt-2"
+        <TouchableOpacity
+            className="bg-white rounded-lg h-24 mt-2"
         >
             <Text className="mt-3 ml-5 font-bold text-xl">
                 {list.name}
@@ -15,28 +15,13 @@ const ListCard = ({ list }) => {
             <Text className="ml-5 text-xl">
                 {list.date}
             </Text>
-            <View className="h-40 bg-white rounded-lg m-2">
-                <ScrollView
-                    vertical
-                    className=""
-                >
-                    {list.elementList.map((item,key) => {
-                        return(
-                            <Text className="text-center my-2 text-1xl" key={key}>
-                                {item.name}
-                            </Text>
-                        )
-                    })}
-                </ScrollView>
-            </View>
             <Text className="text-center text-xl">
-                Pago Final: 
+                Pago Final S/
                 <Text className="font-bold">
                     {" "+finalPayment}
                 </Text>
-                S./
             </Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 

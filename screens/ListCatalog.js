@@ -3,11 +3,16 @@ import { View, Text, TouchableOpacity, Image, ScrollView, TextInput, Alert } fro
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ListCard from '../components/ListCard'
 
-
+// name:name,
+//             price:price,
+//             count:count,
+//             payment:payment,
+//             id:route.params.productList.length+1
 const data=[
     {
     name:"Lista 1",
     date: "Dia,mes,año",
+    payment:16,
     elementList:[
         {
             name:"Producto 1",
@@ -78,7 +83,7 @@ const data=[
         ]
         },
         {
-            name:"Lista 2",
+            name:"Lista 3",
             date: "Dia,mes,año",
             elementList:[
                 {
@@ -118,7 +123,9 @@ const data=[
 
 const ListCatalog = ({navigation}) => {
     return(
-        <SafeAreaView>
+        <SafeAreaView
+            className="bg-white h-full"
+            >
             <View className="relative flex justify-center items-center p-3">
                 <TouchableOpacity
                     onPress={()=>navigation.goBack()}
@@ -133,7 +140,9 @@ const ListCatalog = ({navigation}) => {
                     Mis Listas
                 </Text>
             </View>
-            <ScrollView>
+            <ScrollView
+                className="px-5 bg-[#D7E6FD]"
+            >
                 {data.map((item,key) => {
                     return(
                         <ListCard list={item} key={key}/>

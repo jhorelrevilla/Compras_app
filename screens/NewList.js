@@ -1,109 +1,110 @@
-import {React,useState} from "react";
-import { View,Text, TouchableOpacity, Image, TextInput, ScrollView} from "react-native";
+import { React, useState } from "react";
+import { View, Text, TouchableOpacity, Image, TextInput, ScrollView } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ProductCard from "../components/ProductCard";
 
-// const productList=[
-//     {
-//         name:"producto 1",
-//         price: 1.5,
-//         count: 1
-//     },
-//     {
-//         name:"producto 2",
-//         price: 2.0,
-//         count: 1
-//     },
-//     {
-//         name:"producto 3",
-//         price: 3.0,
-//         count: 1
-//     },
-//     {
-//         name:"producto 4",
-//         price: 2.4,
-//         count: 1
-//     },
-//     {
-//         name:"producto 5",
-//         price: 1.60,
-//         count: 1
-//     },
-// ]
 
+const NewList = ({ navigation }) => {
+    const [listName, SetListName] = useState("Lista nueva")
+    const [productList, setProductList] = useState([])
+    const [totalPayment, setTotalPayment] = useState(0)
 
-const NewList = ({navigation}) =>{
-    const [listName,SetListName] = useState("Lista nueva")
-    const [productList,setProductList] = useState([])
-
-    const handleDeleteProduct= (productId) => {
+    const handleDeleteProduct = (productId) => {
         const updatedCards = productList.filter(
             (card) => card.id != productId
         )
         setProductList(updatedCards)
+
+        const sum = updatedCards.reduce((count, object) => {
+            return count + parseFloat(object.payment)
+        }, 0)
+        setTotalPayment(sum)
     }
-    const totalPayment = () => {
-        if(productList.length==0){
-            return 0
-        } 
-        const sum=productList.reduce(
-            (count,Object)=>{
-                return count+Object.payment
-            }
-        )
-        return sum
+
+
+    const handleUpdateTotalPayment = () => {
+        const sum = productList.reduce((count, object) => {
+            return count + parseFloat(object.payment)
+        }, 0)
+        setTotalPayment(sum)
     }
-    return(
-        <SafeAreaView className="h-full">
-            <View className="h-[16%]">
-                <View className="flex-row justify-between items-center h-16 mx-3">
-                    <TouchableOpacity
-                        onPress={()=>navigation.goBack()}
-                    >
-                        <Image
-                            className="h-10 w-10"
-                            source={require("../assets/images/backIcon.png")}
-                        />
-                    </TouchableOpacity>
-                    <View className="flex-column items-center">
-                        <Text className="text-xl font-bold">
-                            Nueva Lista
-                        </Text>
-                        <TextInput
-                            value={listName}
-                            onChangeText={SetListName}
-                            maxLength={20}
-                        />
-                    </View>
-                    <Text>
-                        Guardar
+
+    const calculateTotalPayment = (newList) => {
+        const sum = newList.reduce((count, object) => {
+            return count + parseFloat(object.payment)
+        }, 0)
+        setTotalPayment(sum)
+    }
+
+    const handleBlurName = () =>{
+        if(listName==''){
+            SetListName('Lista nueva')
+            return
+        }
+    }
+    return (
+        <SafeAreaView className="h-full bg-white">
+            <View className=" bg-white flex-row justify-between items-center h-16">
+                <TouchableOpacity
+                    className=""
+                    onPress={() => navigation.goBack()}
+                >
+                    <Image
+                        className="h-10 w-10"
+                        source={require("../assets/images/backIcon.png")}
+                    />
+                </TouchableOpacity>
+                <View className="flex-column items-center">
+                    <Text className="text-xl font-bold">
+                        Nueva Lista
                     </Text>
+                    <TextInput
+                        className="border-b text-center font-semibold text-lg"
+                        value={listName}
+                        onChangeText={SetListName}
+                        onBlur={handleBlurName}
+                        maxLength={20}
+                    />
                 </View>
-                <View className="bg-[#A187D9]  h-12 flex-row justify-center items-center">
-                    <Text className="text-white text-2xl font-bold">
-                        {/* Pago S/ {totalPayment()} */}
-                        Pago S/
-                    </Text>
-                </View>
+                <TouchableOpacity
+                    className="mr-3"
+                // onPress={()=>navigation.goBack()}
+                >
+                    <Image
+                        className="h-8 w-8"
+                        source={require("../assets/images/SaveIcon.png")}
+                    />
+                </TouchableOpacity>
             </View>
-            <View className="h-[76%] mx-5">
-                <ScrollView className="h-full">
+            <View className="h-[84%] bg-[#EAF6CF]">
+                <View className="bg-white  h-12 flex-row justify-center items-center border-2 mx-5 rounded-full my-2">
+                    <Text className="text-black text-2xl font-bold ">
+                        Pago S/ {parseFloat(totalPayment).toFixed(2)}
+                    </Text>
+                </View>
+                <ScrollView className="h-full mx-5">
                     {productList.map((item) => {
-                        return(
-                            <ProductCard item={item} key={item.id} onDelete={handleDeleteProduct}/>
+                        return (
+                            <ProductCard
+                                item={item}
+                                key={item.id}
+                                onDelete={handleDeleteProduct}
+                                onUpdatePayment={handleUpdateTotalPayment}
+                            />
                         )
                     })}
                 </ScrollView>
             </View>
             <View className="h-[8%]">
-                <TouchableOpacity 
+                <TouchableOpacity
                     className="bg-black h-full"
-                    onPress={()=>
+                    onPress={() =>
                         navigation.navigate(
                             "NewProduct",
                             {
-                                setProductList:setProductList,
-                                productList:productList
+                                setProductList: setProductList,
+                                updatePayment: calculateTotalPayment,
+                                productList: productList
                             }
                         )
 
@@ -120,7 +121,7 @@ const NewList = ({navigation}) =>{
                     </View>
                 </TouchableOpacity>
             </View>
-            
+
         </SafeAreaView>
     )
 }

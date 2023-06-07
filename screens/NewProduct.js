@@ -4,12 +4,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const NewProduct = ({navigation,route}) => {
     const [name, setName] = useState('')
-    const [price, setPrice] = useState('')
+    const [price, setPrice] = useState('0')
     const [count, setCount] = useState(1)
     const [payment, setPayment] = useState(null)
 
-    const hadleNewProduct= () => {
-        // console.log(route.params.productList)
+    const handleNewProduct = () =>{
+        if (name=='' || parseFloat(price)==0 ){
+            return
+        }
+        createNewProduct()
+        navigation.goBack()
+    }
+    const createNewProduct = () => {
         const newProductObject={
             name:name,
             price:price,
@@ -19,6 +25,7 @@ const NewProduct = ({navigation,route}) => {
         }
         const newList=[...route.params.productList,newProductObject]
         route.params.setProductList(newList)
+        route.params.updatePayment(newList)
     }
 
     const calculateTotalPayment = (actualPrice,actualCount) => {
@@ -54,7 +61,7 @@ const NewProduct = ({navigation,route}) => {
     }
     const handleBlurPrice = () => {
         if(price==''){
-            setPrice('0.0')
+            setPrice('0')
             return
         }
         setPrice(parseFloat(price).toFixed(2))
@@ -124,49 +131,60 @@ const NewProduct = ({navigation,route}) => {
                 </View>
             </View>
             <View className=" h-[58%] mx-5">
-                <Text className="text-lg font-bold">
-                    Nombre
-                </Text>
-                <TextInput
-                    className="border-b-2 text-lg px-1 "
-                    value={name}
-                    onChangeText={setName}
-                    maxLength={15}
-                    placeholder="Máximo 15 letras"
-                    inputMode="text"
-                />
-                <Text className="text-lg font-bold">
-                    Precio
-                </Text>
-                <TextInput
-                    className="border-b-2 text-lg px-1 "
-                    value={price}
-                    onChangeText={handleInputPrice}
-                    keyboardType="numeric"
-                    placeholder="0.0"
-                    inputMode="decimal"
-                    onBlur={handleBlurPrice}
-                    maxLength={9}
-                />
-                <Text className="text-lg font-bold">
-                    Cantidad
-                </Text>
-                <TextInput
-                    className="border-b-2 text-lg px-1 "
-                    value={''+count}
-                    onChangeText={handleInputCount}
-                    keyboardType="numeric"
-                    placeholder="1"
-                    inputMode="numeric"
-                    onBlur={handleBlurCount}
-                    maxLength={2}
-                />
+                <View className="mb-5">
+                    <Text className="text-lg font-medium">
+                        Nombre
+                        <Text className="text-base font text-gray-500">
+                            {name==''?' requerido':''}
+                        </Text>
+                    </Text>
+                    <TextInput
+                        className="border-b-2 text-lg px-1 "
+                        value={name}
+                        onChangeText={setName}
+                        maxLength={15}
+                        placeholder="Máximo 15 letras"
+                        inputMode="text"
+                    />
+                </View>
+                <View className="mb-5">
+                    <Text className="text-lg font-medium">
+                        Precio
+                        <Text className="text-base font text-gray-500">
+                            {parseFloat(price)==0?' requerido':''}
+                        </Text>
+                    </Text>
+                    <TextInput
+                        className="border-b-2 text-lg px-1 "
+                        value={price}
+                        onChangeText={handleInputPrice}
+                        keyboardType="numeric"
+                        placeholder="0.0"
+                        inputMode="decimal"
+                        onBlur={handleBlurPrice}
+                        maxLength={9}
+                    />
+                </View>
+                <View className="mb-5">
+                    <Text className="text-lg font-medium">
+                        Cantidad
+                    </Text>
+                    <TextInput
+                        className="border-b-2 text-lg px-1 "
+                        value={''+count}
+                        onChangeText={handleInputCount}
+                        keyboardType="numeric"
+                        placeholder="1"
+                        inputMode="numeric"
+                        onBlur={handleBlurCount}
+                        maxLength={2}
+                    />
+                </View>
             </View>
             <TouchableOpacity 
                 className="bg-black h-[8%] flex-row justify-center items-center"
                 onPress={()=>{
-                    hadleNewProduct()
-                    navigation.goBack()
+                    handleNewProduct()
                 }}
             >
                 <Text className="text-center text-white text-xl font-bold">
